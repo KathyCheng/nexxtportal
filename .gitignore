@@ -1,6 +1,11 @@
 # GITIGNORE - CLIENT
 node_modules/
 bower_components/
+.sass-cache/
+.tmp/
+test/
+package-lock.json
+yarn.lock
 *-error.json
 *.log
 .DS_Store
