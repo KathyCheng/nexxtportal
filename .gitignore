@@ -1,0 +1,6 @@
+# GITIGNORE - CLIENT
+node_modules/
+bower_components/
+*-error.json
+*.log
+.DS_Store

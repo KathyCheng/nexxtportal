@@ -1,0 +1,122 @@
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name App
+ * @description
+ * # App
+ *
+ * Main module of the application.
+ */
+angular.module('App', [
+    'ngAnimate',
+    'ngAria',
+    'ngCookies',
+    'ngMessages',
+    'ngResource',
+    'ngRoute',
+    'ngSanitize',
+    'ngTouch',
+    /* ACL COMPONENTS */
+    'App.authServices',
+    'App.base64Services', // jwtService.js
+    'App.apiServices',
+    /* MODULES */
+    'App.landingServices',
+    'App.userServices',
+    'App.modalServices',
+])
+.config([
+  '$httpProvider', 
+  '$locationProvider', 
+  '$routeProvider', 
+  function ($httpProvider, $locationProvider, $routeProvider) {
+
+    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    $httpProvider.defaults.useXDomain = true;
+    $httpProvider.defaults.withCredentials = true;
+    // $httpProvider.interceptors.push('authInterceptor');
+
+    $locationProvider.html5Mode(true).hashPrefix('!');
+    if (window.history && window.history.pushState) {
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        }).hashPrefix('!');
+    }
+
+    console.log( 'httpProvider: ', $httpProvider );
+    console.log( 'locationProvider: ', $locationProvider );
+
+    $routeProvider
+      .when('/', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+        controllerAs: 'main',
+        resolve: {
+          app: function ($q, $timeout) {
+              var defer = $q.defer();
+              $timeout(function () {
+                  defer.resolve();
+              });
+              return defer.promise;
+          }
+        },
+        access: {
+            requireLogin: false
+        }
+      })
+      .when('/:module', {
+        templateUrl: 'views/modules/index.html',
+        controller: 'ModulesCtrl',
+        controllerAs: 'modules',
+        resolve: {
+          app: function ($q, $timeout) {
+              var defer = $q.defer();
+              $timeout(function () {
+                  defer.resolve();
+              });
+              return defer.promise;
+          }
+        },
+        access: {
+            requireLogin: true
+        }
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
+}])
+.run([
+  '$rootScope',
+  '$route','$http',
+  '$location',
+  '$window', 
+  'AuthenticationService',
+  function ($rootScope, $route, $http, $location, $window, AuthenticationService) {
+
+    // DISABLE BUTTON ON CLICK FOR ALL XHR CALLS
+    $http.defaults.transformRequest.push(function (data) {
+        $rootScope.disableButton = true;
+        angular.element('.loading-spinner-holder').show();
+        return data;
+    });
+    // ENABLE BUTTONS ON XHR COMPLETION
+    $http.defaults.transformResponse.push(function (data) {
+        $rootScope.disableButton = false;
+        angular.element('.loading-spinner-holder').hide();
+        return data;
+    });
+
+    $rootScope.$on('$routeChangeStart', function (event, nextRoute) {
+
+      if ( nextRoute !== null &&
+          // nextRoute.access !== null &&
+          !AuthenticationService.isLogged &&
+          !$window.sessionStorage.token) {
+          $location.path('/');
+      }
+
+    });
+
+}]);
