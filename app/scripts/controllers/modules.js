@@ -10,8 +10,10 @@
 angular.module('App').controller('ModulesCtrl', [
     '$rootScope',
     '$scope',
+    '$window',
+    '$location',
     'base64',
-function ($rootScope, $scope, base64) {
+function ($rootScope, $scope, $window, $location, base64) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -23,6 +25,25 @@ function ($rootScope, $scope, base64) {
 
   $scope.logout = function () {
     base64.deleteJwtFromSessionStorage();
+  };
+
+  // BUILD THIS MODULE CONTENT
+  if ($rootScope.profile) {
+    // contentService.loadThisModule($route, $scope);
+          contentService.loadModule( $route, $scope );
+  } 
+      else {
+    $rootScope.profile = JSON.parse($window.sessionStorage.profile);
+    $rootScope.credentials = JSON.parse($window.sessionStorage.credentials);
+    $rootScope.modules = JSON.parse($window.sessionStorage.modules);
+    // $rootScope.system = JSON.parse($window.sessionStorage.system);
+
+    // contentService.loadThisModule($route, $scope);
+    // contentService.loadModule( $route, $scope );
+  }
+
+  $scope.isActive = function (path) {
+    return ($location.path().indexOf(path) > -1);
   };
 
     

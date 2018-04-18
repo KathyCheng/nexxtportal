@@ -15,10 +15,10 @@
             <ul class="nav navbar-nav" data-ng-init="$root.modules">
                 <li class="animate-repeat" 
                     data-ng-repeat="items in $root.modules" 
-                    data-ng-class='{active:isActive("/{{items.module | lowercase }}")}'>
-                    <a id="{{item.id}}" data-ng-href="/#!/{{ items.module | lowercase }}">
+                    data-ng-class='{active:isActive("/{{items.name | lowercase }}")}'>
+                    <a id="{{ items.id }}" data-ng-href="/#!/{{ items.name | lowercase }}">
                         <small>
-                            <i class="{{items.ico}}"></i>&nbsp;<span data-ng-bind="items.module"/>
+                            <i class="{{items.ico}}"></i>&nbsp;<span data-ng-bind="items.name"/>
                         </small></a>
                 </li>
                 <li class="divider"></li>
@@ -34,9 +34,10 @@
                         <i class="fa fa-male"></i>&nbsp;<span data-ng-bind="$root.profile.firstName"></span>&nbsp;
                         <i class="fa fa-caret-down"></i>
                     </small></a>
+                    
                     <ul id="systemModules" class="dropdown-menu">
-<!-- SYSTEM ADMINISTRATOR GROUP | ADMINISTRATOR ROLE -->
-                            <!-- loop through user modules -->
+<!-- SYSTEM ADMINISTRATOR GROUP | ADMINISTRATOR ROLE
+                            <!-- loop through user modules
                             <li class="animate-repeat"
                                 data-ng-repeat="items in $root.system.Users.modules" 
                                 data-ng-show="$root.credentials.group_id == '1' && $root.credentials.role_id < '3'"
@@ -47,10 +48,10 @@
                                     </small>
                                 </a>
                             </li>
-                            <!-- end user modules -->
+                            <!-- end user modules
                             <li class="divider" 
                                 data-ng-show="$root.credentials.group_id == '1' && $root.credentials.role_id < '3'"></li>
-                            <!-- loop through application modules -->
+                            <!-- loop through application modules
                             <li class="animate-repeat"
                                 data-ng-repeat="items in $root.system.Application.modules" 
                                 data-ng-show="$root.credentials.group_id == '1' && $root.credentials.role_id < '3'"
@@ -61,7 +62,7 @@
                                     </small>
                                 </a>
                             </li>
-                            <!-- end application modules -->
+                            <!-- end application modules
                             <li class="divider" 
                                 data-ng-show="$root.credentials.group_id == '1' && $root.credentials.role_id < '3'"></li>
 <!-- // -->

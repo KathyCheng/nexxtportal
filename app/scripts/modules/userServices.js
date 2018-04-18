@@ -76,11 +76,13 @@ function($http, $q, $window, $location, $cookies, restAPI, base64, $rootScope, A
                     $rootScope.organization = acl.organization;
                     $rootScope.profile = acl.profile;
                     $rootScope.modules = acl.modules;
+                    $rootScope.system = acl.system;
 
                     $window.sessionStorage.profile = JSON.stringify($rootScope.profile);
                     $window.sessionStorage.credentials = JSON.stringify($rootScope.credentials);
                     $window.sessionStorage.organization = JSON.stringify($rootScope.organization);
                     $window.sessionStorage.modules = JSON.stringify($rootScope.modules);
+                    $window.sessionStorage.system = JSON.stringify($rootScope.system);
 
                     deferred.resolve(res);
                 }
