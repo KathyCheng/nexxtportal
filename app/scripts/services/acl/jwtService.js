@@ -65,6 +65,8 @@ angular.module('App.base64Services', []).factory('base64', function ($window, $l
         },
 
         saveJwtToSessionStorage : function(token) {
+
+            console.log( 'jwtService.saveJwtToSessionStorage.token: ', token );
             // save to sessionStorage
             $window.sessionStorage.token = token;
             $window.sessionStorage.idx = 0;

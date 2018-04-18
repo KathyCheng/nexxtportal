@@ -17,6 +17,7 @@ angular.module('App', [
     'ngRoute',
     'ngSanitize',
     'ngTouch',
+    'angular-growl',
     /* ACL COMPONENTS */
     'App.authServices',
     'App.base64Services', // jwtService.js
@@ -27,10 +28,22 @@ angular.module('App', [
     'App.modalServices',
 ])
 .config([
-  '$httpProvider', 
-  '$locationProvider', 
-  '$routeProvider', 
-  function ($httpProvider, $locationProvider, $routeProvider) {
+    'growlProvider',
+    '$httpProvider', 
+    '$locationProvider', 
+    '$routeProvider', 
+function (growlProvider, $httpProvider, $locationProvider, $routeProvider) {
+
+    // manage GROWL Notification Messages
+    growlProvider.globalTimeToLive({
+        success: 2000,
+        error: 2000,
+        warning: 3000,
+        info: 5000
+    })
+    .globalInlineMessages(false)
+    .globalPosition('top-right')
+    .globalDisableIcons(false);
 
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     $httpProvider.defaults.useXDomain = true;

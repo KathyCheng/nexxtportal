@@ -49,7 +49,8 @@ function($rootScope, $compile, $q, utils, elements, modalService) {
             
             html += '<input type="email" style="display:none;"/>';
             html += '<input type="password" style="display:none;"/>';
-            html +='<div class="col-sm-12"><div class="form-group"><div class="col-sm-2">';
+            html += '<div growl inline="false" reference="1"></div>';
+            html +='<div id="fmLogin" class="col-sm-12"><div class="form-group"><div class="col-sm-2">';
             html += '<label for="email">Email</label></div><div class="col-sm-6">'
             html += '<input type="email" name="email" class="form-control" data-ng-model="user.email"';
             html += ' data-ng-required="true" autocomplete="false" placeholder="Email Address"/>';

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * @ngdoc function
@@ -8,75 +8,73 @@
  * Controller of the App
  */
 angular.module('App').controller('MainCtrl', [
-  '$rootScope',
-  '$scope',
-  '$location',
-  '$window',
-  'utils',
-  'AuthenticationService',
-  'userService',
-  'landingService',
-  function ($rootScope, $scope, $location, $window, utils, AuthenticationService, userService, landingService) {
+    '$rootScope',
+    '$scope',
+    '$location',
+    '$window',
+    'utils',
+    'AuthenticationService',
+    'userService',
+    'landingService',
+    'growl',
+function ($rootScope, $scope, $location, $window, utils, AuthenticationService, userService, landingService, growl) {
     this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
+        'HTML5 Boilerplate',
+        'AngularJS',
+        'Karma'
     ];
 
     if(!$window.sessionStorage.token){
 
-      console.log( 'SCOPE > ', $scope );
-      $scope.currentModule = {
+    console.log( 'SCOPE > ', $scope );
+    $scope.currentModule = {
         name: null,
-        modal: {
-          method: ''
+        modal: { 
+            method: ''
         },
-        type: 0
-      };
+        type: 0 
+    };
 
-      $scope.modalWindow = function(str){ 
+    $scope.modalWindow = function(str){ 
         return landingService[str](str, $scope); 
-      };
+    };
 
-      $scope.login = function(){
-          
-          var user = $scope.user;
-          
-          // user.hash = utils.stringEncode(user.password);
-          
-          console.log( '|--------------------------------------|' );
-          console.log( 'USER >> ', user );
+    $scope.login = function(){
+        
+        var user = $scope.user;
+        
+        // user.hash = utils.stringEncode(user.password);
+        
+        console.log( '|--------------------------------------|' );
+        console.log( 'USER >> ', user );
 
-          // growl.warning('Checking Your Credentials', { referenceId: 1, ttl: 15000 });
+        growl.warning('Checking Your Credentials', { referenceId: 1, ttl: 3000 });
 
-          userService.loginUser(user).then(function(){
-              
-              !$rootScope.assets ? $rootScope.assets = [] : null;
-              AuthenticationService.isLogged = true;
+        userService.loginUser(user).then(function(){
+            
+            !$rootScope.assets ? $rootScope.assets = [] : null;
+            AuthenticationService.isLogged = true;
 
-              console.log( 'load environment...' );
-              $location.url('/dashboard');
+            console.log( 'load environment...' );
 
-              /*
-              growl.info('Loading Your Environment', {
-                  referenceId: 1,
-                  onopen: function(){ angular.element('#fmLogin').css('display', 'none'); }
-              });
-              
-              growl.success('Logged In Successfully!', {
-                  referenceId: 1,
-                  onclose: function(){ $location.url('/dashboard'); }
-              });
-              */
-              
-          },
-          function(error){
-              AuthenticationService.isLogged = false;
-              var msg = 'Error: ' + error;
-              // utils.growlMessage('error', msg, 1);
-          });
+            growl.info('Loading Your Environment', {
+                referenceId: 1,
+                onopen: function(){ angular.element('#fmLogin').css('display', 'none'); }
+            });
+            
+            growl.success('Logged In Successfully!', {
+                referenceId: 1,
+                onclose: function(){ $window.location.href = '/dashboard'; }
+            });
+            
+        },
+        function(error){
+            AuthenticationService.isLogged = false;
+            var msg = 'Error: ' + error;
+            // utils.growlMessage('error', msg, 1);
+        });
 
-      }; 
+    }; 
 
     }
     else{

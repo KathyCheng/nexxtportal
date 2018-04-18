@@ -41,17 +41,11 @@ angular.module('App.modalServices',[]).service('modalService', function ($q, $co
                 }
             };
             
-            var statuses = '<span class="pull-right status-title {{newTransaction.status.selected.value}}">';
-            statuses += '<strong>{{newTransaction.status.selected.value}}</strong> &nbsp; &nbsp; &nbsp;';
-            
             modalHeader += '<div class="modal-dialog modal-lg" data-backdrop="static" data-keyboard="false">';
             modalHeader += '<div class="modal-content">';
             modalHeader += '<div class="modal-header">';
             
-            moduleType === 2 ? 
-                modalHeader += statuses + buttons.modalTimesClose() :
-                modalHeader += '<span class="pull-right">' + buttons.modalTimesClose();
-            
+            modalHeader += '<span class="pull-right">' + buttons.modalTimesClose();
             modalHeader += '<div growl inline="false" reference="3"/>';
             
 			modalHeader += '</span><h4 class="modal-title">';
@@ -68,17 +62,8 @@ angular.module('App.modalServices',[]).service('modalService', function ($q, $co
 
             modalFooter += '<div class="modal-footer">';
 
-            if( parseInt(moduleType) === 2 ){
-                status = $scope.newTransaction.status.selected.id;
-                
-                modalFooter += buttons.modalClose();
-                modalFooter += buttons.modalSubmit(moduleName,moduleMethod);
-                
-            }
-            else{
-                modalFooter += buttons.modalClose();
-                modalFooter += buttons.modalSubmit(moduleName,moduleMethod);
-            }
+            modalFooter += buttons.modalClose();
+            modalFooter += buttons.modalSubmit(moduleName,moduleMethod);
             
             modalFooter += '</div></div></div>';
             
