@@ -25,6 +25,9 @@ angular.module('App', [
     /* MODULES */
     'App.landingServices',
     'App.userServices',
+    'App.moduleServices',
+    'App.contentServices',
+    /* DOM */
     'App.modalServices',
 ])
 .config([

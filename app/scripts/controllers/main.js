@@ -30,7 +30,7 @@ function ($rootScope, $scope, $location, $window, utils, AuthenticationService, 
     $scope.currentModule = {
         name: null,
         modal: { 
-            method: ''
+            method: 'get'
         },
         type: 0 
     };
@@ -61,12 +61,11 @@ function ($rootScope, $scope, $location, $window, utils, AuthenticationService, 
                 referenceId: 1,
                 onopen: function(){ angular.element('#fmLogin').css('display', 'none'); }
             });
-            
+
             growl.success('Logged In Successfully!', {
                 referenceId: 1,
                 onclose: function(){ $window.location.href = '/dashboard'; }
             });
-            
         },
         function(error){
             AuthenticationService.isLogged = false;

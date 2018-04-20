@@ -12,8 +12,11 @@ angular.module('App').controller('ModulesCtrl', [
     '$scope',
     '$window',
     '$location',
+    '$route',
     'base64',
-function ($rootScope, $scope, $window, $location, base64) {
+    'moduleService',
+    'contentService',
+function ($rootScope, $scope, $window, $location, $route, base64, moduleService, contentService) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -29,22 +32,23 @@ function ($rootScope, $scope, $window, $location, base64) {
 
   // BUILD THIS MODULE CONTENT
   if ($rootScope.profile) {
-    // contentService.loadThisModule($route, $scope);
-          contentService.loadModule( $route, $scope );
+    // LOAD THIS MODULE
+    moduleService.loadModule( $route, $scope );
   } 
-      else {
+  else {
     $rootScope.profile = JSON.parse($window.sessionStorage.profile);
     $rootScope.credentials = JSON.parse($window.sessionStorage.credentials);
     $rootScope.modules = JSON.parse($window.sessionStorage.modules);
-    // $rootScope.system = JSON.parse($window.sessionStorage.system);
-
-    // contentService.loadThisModule($route, $scope);
-    // contentService.loadModule( $route, $scope );
+    $rootScope.system = JSON.parse($window.sessionStorage.system);
+    // LOAD THIS MODULE
+    moduleService.loadModule( $route, $scope );
   }
 
   $scope.isActive = function (path) {
     return ($location.path().indexOf(path) > -1);
   };
+
+
 
     
 }]);

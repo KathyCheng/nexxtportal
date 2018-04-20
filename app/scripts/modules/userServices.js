@@ -76,7 +76,7 @@ function($http, $q, $window, $location, $cookies, restAPI, base64, $rootScope, A
                     $rootScope.organization = acl.organization;
                     $rootScope.profile = acl.profile;
                     $rootScope.modules = acl.modules;
-                    $rootScope.system = acl.system;
+                    $rootScope.system = acl.type;
 
                     $window.sessionStorage.profile = JSON.stringify($rootScope.profile);
                     $window.sessionStorage.credentials = JSON.stringify($rootScope.credentials);
