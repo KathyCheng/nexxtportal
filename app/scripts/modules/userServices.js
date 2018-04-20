@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * User Login Services
  * Migrated from personal project
@@ -12,6 +10,7 @@
  */
 
 angular.module('App.userServices', []).service('userService', [
+    '$log',
     '$http',
     '$q',
     '$window',
@@ -22,8 +21,9 @@ angular.module('App.userServices', []).service('userService', [
     '$rootScope',
     'AuthenticationService',
     'utils',
-function($http, $q, $window, $location, $cookies, restAPI, base64, $rootScope, AuthenticationService, utils) {
-
+function($log, $http, $q, $window, $location, $cookies, restAPI, base64, $rootScope, AuthenticationService, utils) {
+    'use strict';
+    
     return {
 
         /**
@@ -50,15 +50,15 @@ function($http, $q, $window, $location, $cookies, restAPI, base64, $rootScope, A
 
             restAPI.userLogin.save(user, function(res){
                 
-                console.log( 'login form', user );
-                console.log('login response', res);
+                $log.info( 'login form', user );
+                $log.info('login response', res);
                 
                 var results = res;
                 
-                console.log( '|----------------------------------------|' );
-                console.log( 'USER-SERVICE.RESTAPI-USER-LOGIN.RESPONSE >> ', JSON.stringify(res) );
-                console.log( '|----------------------------------------|' );
-                console.log( 'RESULTS >> ', results );
+                $log.info( '|----------------------------------------|' );
+                $log.info( 'USER-SERVICE.RESTAPI-USER-LOGIN.RESPONSE >> ', JSON.stringify(res) );
+                $log.info( '|----------------------------------------|' );
+                $log.info( 'RESULTS >> ', results );
 
                 // FAILED RESPONSE
                 if(results.status === 401){ utils.growlMessage('warning', results.msg, 1); }
@@ -118,4 +118,5 @@ function($http, $q, $window, $location, $cookies, restAPI, base64, $rootScope, A
             return deferred.promise;
         }
     };  //@END return()
+    
 }]); //@ EOF

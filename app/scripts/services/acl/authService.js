@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Authenticate Users
  * Migrated from personal project
@@ -15,7 +13,7 @@
 angular
     .module('App.authServices', [])
     .factory('AuthenticationService', function($rootScope, $window){
-
+        'use strict';
         var auth;
 
         if(!$window.sessionStorage.token){

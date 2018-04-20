@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @ngdoc function
  * @name App.controller:MainCtrl
@@ -8,6 +6,7 @@
  * Controller of the App
  */
 angular.module('App').controller('MainCtrl', [
+    '$log',
     '$rootScope',
     '$scope',
     '$location',
@@ -17,7 +16,9 @@ angular.module('App').controller('MainCtrl', [
     'userService',
     'landingService',
     'growl',
-function ($rootScope, $scope, $location, $window, utils, AuthenticationService, userService, landingService, growl) {
+function ($log, $rootScope, $scope, $location, $window, utils, AuthenticationService, userService, landingService, growl) {
+    'use strict';
+
     this.awesomeThings = [
         'HTML5 Boilerplate',
         'AngularJS',
@@ -26,7 +27,7 @@ function ($rootScope, $scope, $location, $window, utils, AuthenticationService, 
 
     if(!$window.sessionStorage.token){
 
-    console.log( 'SCOPE > ', $scope );
+    $log.info( 'SCOPE > ', $scope );
     $scope.currentModule = {
         name: null,
         modal: { 
@@ -45,8 +46,8 @@ function ($rootScope, $scope, $location, $window, utils, AuthenticationService, 
         
         // user.hash = utils.stringEncode(user.password);
         
-        console.log( '|--------------------------------------|' );
-        console.log( 'USER >> ', user );
+        $log.info( '|--------------------------------------|' );
+        $log.info( 'USER >> ', user );
 
         growl.warning('Checking Your Credentials', { referenceId: 1, ttl: 3000 });
 
@@ -55,7 +56,7 @@ function ($rootScope, $scope, $location, $window, utils, AuthenticationService, 
             !$rootScope.assets ? $rootScope.assets = [] : null;
             AuthenticationService.isLogged = true;
 
-            console.log( 'load environment...' );
+            $log.info( 'load environment...' );
 
             growl.info('Loading Your Environment', {
                 referenceId: 1,
@@ -70,7 +71,7 @@ function ($rootScope, $scope, $location, $window, utils, AuthenticationService, 
         function(error){
             AuthenticationService.isLogged = false;
             var msg = 'Error: ' + error;
-            // utils.growlMessage('error', msg, 1);
+            utils.growlMessage('error', msg, 1);
         });
 
     }; 

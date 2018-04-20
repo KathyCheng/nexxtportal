@@ -1,10 +1,10 @@
-'use strict';
-
 /**
  * GENERAL JSON OBJECT BUTTON EVENT
  */
 
 angular.module('App').factory('buttons', function( $rootScope, utils ){
+
+    'use strict';
     
     return {
 

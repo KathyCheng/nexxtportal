@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @ngdoc service
  * @name clientApp.moduleServices
@@ -21,6 +19,7 @@
 ================================================ */
 
 angular.module('App.moduleServices', []).service('moduleService', [
+    '$log',
     '$q', 
     '$rootScope',
     '$compile', 
@@ -31,7 +30,8 @@ angular.module('App.moduleServices', []).service('moduleService', [
     'base64',
     'utils',
     'restAPI',
-function($q, $rootScope, $compile, $window, $location, $route, AuthenticationService, base64, utils, restAPI) {
+function($log, $q, $rootScope, $compile, $window, $location, $route, AuthenticationService, base64, utils, restAPI) {
+    'use strict';
     
     return {
 		
@@ -89,13 +89,8 @@ function($q, $rootScope, $compile, $window, $location, $route, AuthenticationSer
                     path = $location.path().split('/'),
                     idx = $window.sessionStorage.idx,
                     modules = JSON.parse($window.sessionStorage.modules),
-                    // acl = JSON.parse( utils.stringDecode($window.sessionStorage.acl) ), 
                     profile = JSON.parse($window.sessionStorage.profile),
                     credentials = JSON.parse($window.sessionStorage.credentials),
-                    // permissions = JSON.parse($window.sessionStorage.permissions),
-                    // locations = JSON.parse($window.sessionStorage.locations),
-                    // system = JSON.parse($window.sessionStorage.system),
-                    // sysArray = [], 
                     currentModule = {}, 
                     deferred = $q.defer(), 
                     i = 0;
@@ -104,37 +99,9 @@ function($q, $rootScope, $compile, $window, $location, $route, AuthenticationSer
 
                 !$rootScope.assets ? $rootScope.assets = [] : null;
 
-                /*
-                // CREATE SECONDARY NAVIGATION
-                var system = JSON.parse($window.sessionStorage.system),
-                    Application = system.Application.modules,
-                    Users = system.Application.modules;
-
-                angular.forEach(Application, function(item){ sysArray.push(item); });
-                angular.forEach(Users, function(item){ sysArray.push(item); });
-
-                $rootScope.locations = locations;
-                $rootScope.modules = permissions[idx].modules;
-
-                // PARSE SYSTEM MODULES
-                for( i = 0; i < sysArray.length; i++ ){
-                    if(sysArray[i].module.toLowerCase() === path[0]){
-                        currentModule = { 
-                            id: sysArray[i].module_id, 
-                            name: sysArray[i].module, 
-                            ico: sysArray[i].ico,
-                            type: sysArray[i].type,
-                            paging: {}
-                        };
-                        currentModule.permissions = sysArray[i].permissions;
-                        currentModule.location = $rootScope.locations[idx];
-                    }
-                }
-                */
-
                 // DEFINE CURRENT MODULE
                 // var modules = $rootScope.modules;
-                console.log( 'Modules : ', modules );
+                $log.info( 'Modules : ', modules );
                 for( i = 0; i < modules.length; i++ ){
 
                     if(modules[i].name.toLowerCase() === path[0]){
@@ -149,8 +116,6 @@ function($q, $rootScope, $compile, $window, $location, $route, AuthenticationSer
                         };
 
                         currentModule.permissions = $rootScope.credentials;
-                        // currentModule.permissions = modules[i].permissions;
-                        // currentModule.location = $rootScope.locations[idx];
                         $scope.currentModule = currentModule;
                     }
                 }
@@ -176,14 +141,7 @@ function($q, $rootScope, $compile, $window, $location, $route, AuthenticationSer
                 moduleType = thisModule.type,
                 idx = parseInt($window.sessionStorage.idx),
                 pagingOptions = {},
-                filterOptions = {},
-                is_active = [{ id: Boolean(true), value: "True" }, { id: Boolean(false), value: "False" }];
-            
-            // FORCE THE FILTER-OPTIONS
-            if(moduleType === 3){
-                utils.toType(thisModule.report) !== 'undefined' ? filterOptions = thisModule.report : null;
-                filterOptions.report.range = utils.parseDateObject( filterOptions.report.range );
-            }
+                filterOptions = {};
 
             // SET UP QUERY OPTIONS
             !$window.sessionStorage.paging ? 
@@ -192,16 +150,25 @@ function($q, $rootScope, $compile, $window, $location, $route, AuthenticationSer
 
             thisModule.paging = pagingOptions;
 
+            /*
             var moduleData = {
-                module: 'view', 
-                table: moduleName, 
+                layout: 'table', 
+                schema: 0,
+                module: moduleName, 
                 params: thisModule, 
-                // location: thisModule.location.id,
-                // establishment: parseInt($window.sessionStorage.establishment), 
+                organization: JSON.parse($window.sessionStorage.organization), 
                 profile: JSON.parse($window.sessionStorage.profile),
-                // manufacturers: [],
-                // locations: [], 
-                filters: filterOptions
+                filters: filterOptions,
+                paging: pagingOptions
+            };
+            */
+
+            var moduleData = {
+                module: moduleName,
+                paging: pagingOptions,
+                filters: filterOptions,
+                organization: JSON.parse($window.sessionStorage.organization).id,
+                token: $window.sessionStorage.token.toString()
             };
 
             var modalExists = angular.element('div.modal').length;
@@ -211,7 +178,7 @@ function($q, $rootScope, $compile, $window, $location, $route, AuthenticationSer
             }
             else{
                 if( moduleName === 'dashboard' ){
-                    console.log( 'LOAD DASHBOARD' );
+                    $log.info( 'LOAD DASHBOARD' );
                     /*
                     dashboardService.config($scope).then(function(results){
 
@@ -232,16 +199,17 @@ function($q, $rootScope, $compile, $window, $location, $route, AuthenticationSer
                     */
                 }
                 else{
-                    console.log( 'moduleData : ', moduleData );
-                    /*
+                    $log.info( 'moduleData : ', moduleData );
+
                     restAPI.getModules.query(moduleData, function(results){
                         
-                        console.log( '|--------------------------------------|' );
-                        console.log( moduleName + ' RESULTS >> ', results );
+                        $log.info( '|--------------------------------------|' );
+                        $log.info( moduleName + ' RESULTS >> ', results );
 
+                        /*
                         var totalRecords = parseInt(results[0].rows[moduleName].totalRecords.count);
                         
-                        console.log( 'TOTAL-RECORDS >> ', totalRecords );
+                        $log.info( 'TOTAL-RECORDS >> ', totalRecords );
 
                         totalRecords >= 0 ? 
                             $window.sessionStorage.totalRecords = totalRecords :
@@ -276,9 +244,10 @@ function($q, $rootScope, $compile, $window, $location, $route, AuthenticationSer
 
                         $window.sessionStorage.paging = JSON.stringify( pagingOptions );
                         deferred.resolve( results[0].rows[moduleName] );
+                        */
 
                     });
-                    */
+
                 }
             }
 

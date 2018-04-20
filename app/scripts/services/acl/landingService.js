@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Resource Service for all landing Page Calls
  * Migrated from personal project
@@ -16,7 +14,7 @@ angular.module('App.landingServices', []).service('landingService', [
     'elements',
     'modalService',
 function($rootScope, $compile, $q, utils, elements, modalService) {
-
+    'use strict';
     return {
 
         form: function(str, html){

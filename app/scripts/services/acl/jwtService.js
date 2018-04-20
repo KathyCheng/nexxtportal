@@ -1,5 +1,3 @@
-'use strict'; 
-
 /**
  * Decode JWT
  * Migrated from personal project
@@ -14,7 +12,8 @@
  */
 
 angular.module('App.base64Services', []).factory('base64', function ($window, $location, $q, utils) {
-
+    'use strict';
+    
     return {
         //Encodes base64 input string
         encode: function (input) {

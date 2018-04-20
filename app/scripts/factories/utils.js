@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * utility helper functions added to $scope
  * added on 2015-05-14 - James Van Leuven
@@ -22,6 +20,8 @@
  */
 
 angular.module('App').factory('utils', function( $q, $window ){
+    'use strict';
+    
     return {
 		
         /**

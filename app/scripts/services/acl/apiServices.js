@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Resource Service for all API Calls
  * Migrated from personal project
@@ -10,7 +8,7 @@
 
 angular.module('App.apiServices', [])
 .service('restAPI', function($rootScope, $http, $window, $location, $resource) {
-    
+    'use strict';
     var api = 'http://localhost:5001/', 
         token = $window.sessionStorage.token;
     
@@ -42,6 +40,12 @@ angular.module('App.apiServices', [])
             params: '@params'
         },{
             method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+            },
             withCredentials: true,
             isArray: true
         }),

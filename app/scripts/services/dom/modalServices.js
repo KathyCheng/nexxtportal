@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @ngdoc service
  * @name App.modalServices
@@ -8,6 +6,7 @@
  * Service in the clientApp.modalService
  */
 angular.module('App.modalServices',[]).service('modalService', function ($q, $compile, utils, buttons){
+    'use strict';
     
     return {
         

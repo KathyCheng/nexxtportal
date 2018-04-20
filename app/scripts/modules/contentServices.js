@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @ngdoc service
  * @name clientApp.contentServices
@@ -13,6 +11,7 @@
 ================================================ */
 
 angular.module('App.contentServices', []).service('contentService', [
+    '$log',
     '$rootScope', 
     '$q', 
     '$timeout', 
@@ -23,7 +22,8 @@ angular.module('App.contentServices', []).service('contentService', [
     'utils', 
     'elements',
     'moduleService',
-function($rootScope, $q, $timeout, $window, $location, $route, $compile, utils, elements, moduleService) {
+function($log, $rootScope, $q, $timeout, $window, $location, $route, $compile, utils, elements, moduleService) {
+    'use strict';
 
     return {
         
@@ -48,96 +48,6 @@ function($rootScope, $q, $timeout, $window, $location, $route, $compile, utils, 
 
             self.loadModule( $route, $scope );
         },
-        // CALL API
-        loadAPI: function($route, $scope){
-            
-            var self = this, 
-                thisModule = $scope.currentModule,
-                moduleName = thisModule.name.toLowerCase(),
-				moduleType = parseInt(thisModule.type),
-                routeParams = $route.current.params,
-                establishment = parseInt($window.sessionStorage.establishment),
-                assets = $rootScope.assets[moduleName];
-            
-            moduleService.activeModule($route, $scope)
-			.then(function(success){
-				
-				console.log( '|-------------------------------------------|' );
-				console.log( 'CONTENT-SERVICES.LOAD-API.SUCCESS >> ', success );
-                
-                // moduleService.setDateRange( $route, $scope, success );
-
-                if( success.name === 'error'){
-                    
-                    var paging = JSON.parse($window.sessionStorage.paging);
-                    success.definition = 'module';
-                    // LOAD SCOPE
-                    $scope[moduleName] = success.items;
-                    $scope.currentModule.paging.totalRecords = paging.totalRecords;
-                    $rootScope.assets[moduleName] = [];
-
-                    // LOAD SESSION STORAGE
-                    $window.sessionStorage.assets = null;
-                    $window.sessionStorage.paging = JSON.stringify( $scope.currentModule.paging );
-                    
-                    self.loadError( $route, $scope, success );
-                    
-                }
-                else{
-                    
-                    // NO ITEMS EXIST SUBMIT ERROR
-                    if( !success.items ){
-                        $scope.currentModule.paging.totalRecords = 0;
-                        success.definition = 'module';
-                        if( $scope.currentModule.name === 'Dashboard' ){
-                            
-                            var str = success.header + success.body + success.footer;
-                            elements.insertHTML(str, $scope);
-                            
-                            $timeout(function(){
-                                var strHTML = angular.element('div#graphing').html();
-                                //// console.log( 'strHTML', strHTML );
-                                typeof(strHTML) === 'undefined' ? $window.location.reload() : null;
-                            }, 500);
-                        }else{
-                            self.loadError( $route, $scope, success );
-                        }
-                    }else{
-                        
-                        console.log( '|-------------------------------|' );
-                        console.log( 'SUCCESS >> ', success );
-                        
-                        $scope.currentModule.paging.totalRecords = success.totalRecords.count;
-                        $window.sessionStorage.totalRecords = success.totalRecords.count;
-                        $scope[moduleName] = success.items;
-                        $rootScope.assets[moduleName] = success.assets[moduleName];
-                        $window.sessionStorage.paging = JSON.stringify( $scope.currentModule.paging );
-                        self.loadContent( $route, $scope );
-
-                    }
-                }
-
-            }, function(error){
-                console.log( 'error ' + thisModule.name + ': ', error );
-                // LOAD 404 PAGE PARTIAL
-            });
-        },
-        //  LOAD MODULE OBJECT
-        loadModule: function( $route, $scope ){
-
-            console.log( 'THIS-MODULE ', $scope.currentModule );
-            
-            var self = this,
-                thisModule = $scope.currentModule,
-                moduleName = thisModule.name.toLowerCase(),
-                thisEstablishment = parseInt($window.sessionStorage.establishment),
-                thisRoute = Object.keys($route.current.params).length;
-            
-            thisRoute === 1 ? 
-                self.loadAPI($route, $scope) : 
-                self.loadError( $route, $scope, routeParams );
-
-        },
 		
         //  INSERT CONTENT HTML
         loadContent: function( $route, $scope ){
@@ -154,12 +64,12 @@ function($rootScope, $q, $timeout, $window, $location, $route, $compile, utils, 
                 
             viewService.viewBuild($route, $scope).then(function(success){
 
-                role === 1 && moduleName === 'products' ? 
-                    success.content.length > 0 ? 
-                        str += adminBtn + success.content : str += usrBtn : 
-                    str += usrBtn + success.content;
+                // role === 1 && moduleName === 'products' ? 
+                //    success.content.length > 0 ? 
+                //        str += adminBtn + success.content : str += usrBtn : 
+                str += usrBtn + success.content;
                 // confirm socket connection
-                channels.connection( $route, $scope );
+                // channels.connection( $route, $scope );
                 // compile and load html results
                 elements.insertHTML(str, $scope);
             }, function(error){
@@ -173,7 +83,7 @@ function($rootScope, $q, $timeout, $window, $location, $route, $compile, utils, 
                 var str = success.content;
                 elements.insertHTML(str.replace('NaN',''), $scope);
             }, function(error){
-                console.log('viewServices.viewBuild Error', error);
+                $log.info('viewServices.viewBuild Error', error);
             });
         }
     };
