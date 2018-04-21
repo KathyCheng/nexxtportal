@@ -1,6 +1,10 @@
 {
-  "name": "www",
+  "name": "nexxt-portal",
+  "version": "1.0.0",
+  "description": "Nexxt Intelligence Inc - Ste 200 - 140 Yonge Street, Toronto, Ontario Canada M5C 1X6",
   "private": true,
+  "main": "server.js",
+  "license": "MIT",
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",
     "body-parser": "^1.18.2",
