@@ -84,7 +84,7 @@ function (growlProvider, $httpProvider, $locationProvider, $routeProvider) {
       .when('/:module', {
         templateUrl: 'views/modules/index.html',
         controller: 'ModulesCtrl',
-        controllerAs: 'modules',
+        controllerAs: 'app',
         resolve: {
           app: function ($q, $timeout) {
               var defer = $q.defer();

@@ -1,9 +1,9 @@
 /**
  * @ngdoc service
- * @name clientApp.moduleServices
+ * @name App.moduleServices
  * @description
  * # moduleServices
- * Service in the clientApp.
+ * Service in the App.
  *
  *  DASHBOARD.SERVICE IS TEMP FOR NOW
  *  BECAUSE WE'RE NOT YET PULLING THE DASHBOARD
@@ -97,7 +97,7 @@ function($log, $q, $rootScope, $compile, $window, $location, $route, Authenticat
 
                 path.shift(); // first element is null
 
-                !$rootScope.assets ? $rootScope.assets = [] : null;
+                if(!$rootScope.assets){ $rootScope.assets = []; } 
 
                 // DEFINE CURRENT MODULE
                 // var modules = $rootScope.modules;
@@ -138,7 +138,7 @@ function($log, $q, $rootScope, $compile, $window, $location, $route, Authenticat
                 deferred = $q.defer(),
                 thisModule = $scope.currentModule,
                 moduleName = thisModule.name.toLowerCase(),
-                moduleType = thisModule.type,
+                moduleType = 1,
                 idx = parseInt($window.sessionStorage.idx),
                 pagingOptions = {},
                 filterOptions = {};
@@ -150,21 +150,9 @@ function($log, $q, $rootScope, $compile, $window, $location, $route, Authenticat
 
             thisModule.paging = pagingOptions;
 
-            /*
-            var moduleData = {
-                layout: 'table', 
-                schema: 0,
-                module: moduleName, 
-                params: thisModule, 
-                organization: JSON.parse($window.sessionStorage.organization), 
-                profile: JSON.parse($window.sessionStorage.profile),
-                filters: filterOptions,
-                paging: pagingOptions
-            };
-            */
-
             var moduleData = {
                 module: moduleName,
+                type: moduleType,
                 paging: pagingOptions,
                 filters: filterOptions,
                 organization: JSON.parse($window.sessionStorage.organization).id,

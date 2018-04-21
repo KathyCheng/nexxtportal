@@ -53,7 +53,7 @@ function ($log, $rootScope, $scope, $location, $window, utils, AuthenticationSer
 
         userService.loginUser(user).then(function(){
             
-            !$rootScope.assets ? $rootScope.assets = [] : null;
+            if(!$rootScope.assets){ $rootScope.assets = []; }
             AuthenticationService.isLogged = true;
 
             $log.info( 'load environment...' );
