@@ -9,7 +9,7 @@
 angular.module('App.apiServices', [])
 .service('restAPI', function($rootScope, $http, $window, $location, $resource) {
     'use strict';
-    var api = 'http://localhost:5001/', 
+    var api = 'https://api.nexxt.in/', 
         token = $window.sessionStorage.token;
     
     $http.defaults.headers.common['X-Auth-Token'] = token;
