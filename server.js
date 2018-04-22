@@ -74,7 +74,7 @@ if (app.get('env') === 'development') {
 
     app.use(function(req, res, next){
 
-        console.log( 'PORTAL : ', req );
+        // console.log( 'PORTAL : ', req );
 
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Method', 'GET, POST, PUT, PATCH, DEL');
@@ -102,7 +102,7 @@ if (app.get('env') === 'production') {
 
     app.use(function(req, res, next){
 
-        console.log( 'PORTAL: ', req );
+        // console.log( 'PORTAL: ', req );
 
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Method', 'GET, POST, PUT, PATCH, DEL');
